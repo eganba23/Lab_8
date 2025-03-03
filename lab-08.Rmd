@@ -1,7 +1,7 @@
 ---
 title: "Lab 08 - University of Edinburgh Art Collection"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Benjamin Egan"
+date: "03/03/25"
 output: github_document
 ---
 
@@ -9,9 +9,15 @@ output: github_document
 
 First, let's load the necessary packages:  
 
-```{r load-packages, message = FALSE}
+```{r load-packages, message = FALSE, echo = FALSE}
 library(tidyverse) 
 library(skimr)
+library(robotstxt) #use to see if can use paths_allowed
+library(rvest)
+library(magrittr)
+
+paths_allowed("https://collections.ed.ac.uk/art)")
+
 ```
 
 Now, load the dataset. If your data isn't ready yet, you can leave `eval = FALSE` for now and update it when needed.  
