@@ -15,6 +15,7 @@ library(skimr)
 library(robotstxt) #use to see if can use paths_allowed
 library(rvest)
 library(magrittr)
+library(skimr)
 
 paths_allowed("https://collections.ed.ac.uk/art)")
 
@@ -23,9 +24,9 @@ paths_allowed("https://collections.ed.ac.uk/art)")
 Now, load the dataset. If your data isn't ready yet, you can leave `eval = FALSE` for now and update it when needed.  
 
 
-```{r load-data, message = FALSE, eval = FALSE}
-# Remove eval = FALSE or set it to TRUE once data is ready to be loaded
+```{r load-data, message = FALSE, echo = FALSE}
 uoe_art <- read_csv("data/uoe-art.csv")
+view(uoe_art)
 ```
 
 ## Exercise 9
@@ -36,11 +37,41 @@ Let's start working with the **title** column by separating the title and the da
 uoe_art <- uoe_art %>%
   separate(title, into = c("title", "date"), sep = "\\(") %>%
   mutate(year = str_remove(date, "\\)") %>% as.numeric()) %>%
-  select(title, artist, year, ___)  # Fill in the missing variable!
+  select(title, artist, year, link)
 ```
 
-Make sure to replace `___` with the appropriate column name.  
+The code was already provided, so I didn't change anything. I'm guessing the error related to "expected two pieces" is because not all pieces had both a year and an author. I can see no author in some rows (182, 533, etc.) but not in all of them. I'm also guessing that they filled in these missing pieces with "NA." There were probably rows that didn't have parentheses around years, adding to the confusion. One of the rows just gave us a "2" for the year, probably adding to the confusion about including the year.
 
+
+```{r skim}
+skim(uoe_art)
+
+uoe_art %>%
+  ggplot(aes(
+    x = year
+  ))+
+  geom_bar()
+summary(uoe_art)
+```
+
+
+Using skim(), it appears that there are 111 artists missing from the data frame. It also appears there are 1580 data missing from the year column. One of the paintings shows a painting to be from the year 2. Death mask had an additional number in the sequence. The year should be 1964.
+
+```{r filter}
+
+uoe_art_mutated <- uoe_art %>%
+  mutate(year1 = case_when(
+    year == "2" ~ "1964"
+  ))
+
+
+uoe_art_filtered %>%
+  ggplot(aes(
+    x = year
+  ))+
+  geom_bar()
+view(uoe_art_mutated)
+```
 
 ## Exercise 10  
 
