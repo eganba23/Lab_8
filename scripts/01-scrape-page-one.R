@@ -9,11 +9,11 @@ first_url <- "https://collections.ed.ac.uk/art/search/*:*/Collection:%22edinburg
 
 # read first page --------------------------------------------------------------
 
-page <- read_html(first_url)
+page1 <- read_html(first_url)
 
 # scrape titles ----------------------------------------------------------------
 
-titles <- page %>%
+titles <- page1 %>%
   html_nodes(".iteminfo") %>%
   html_node("h3 a") %>%
   html_text() %>%
@@ -21,34 +21,75 @@ titles <- page %>%
 
 # scrape links -----------------------------------------------------------------
 
-links <- page %>%
+links <- page1 %>%
   html_nodes(".iteminfo") %>%
   html_node("h3 a") %>%
   html_attr("href") %>%
-  str_replace("\\.", "___")
+  str_replace(".", "collections.ed.ac.uk")
 
 # scrape artists ---------------------------------------------------------------
 
-artists <- page %>%
+artists <- page1 %>%
   html_nodes(".iteminfo") %>%
   html_node(".artist") %>%
-  ___
+  html_text() %>%
+  str_squish()
+
+artists_links <- page1 %>%
+  html_nodes(".iteminfo") %>%
+  html_node(".artist") %>%
+  html_attr("href") %>%
+  str_replace(".", "collections.ed.ac.uk/art")
+
 
 # put together in a data frame -------------------------------------------------
 
 first_ten <- tibble(
-  title = ___,
-  artist = ___,
-  link = ___
+  title = titles,
+  artist = artists,
+  link = links
 )
 
 # scrape second ten paintings --------------------------------------------------
 
-second_url <- "___"
+second_url <- "https://collections.ed.ac.uk/art/search/*:*/Collection:%22edinburgh+college+of+art%7C%7C%7CEdinburgh+College+of+Art%22?offset=10"
 
-page <- read_html(second_url)
-...
+page2 <- read_html(second_url)
+
+# scrape titles ----------------------------------------------------------------
+
+titles2 <- page2 %>%
+  html_nodes(".iteminfo") %>%
+  html_node("h3 a") %>%
+  html_text() %>%
+  str_squish()
+
+# scrape links -----------------------------------------------------------------
+
+links2 <- page2 %>%
+  html_nodes(".iteminfo") %>%
+  html_node("h3 a") %>%
+  html_attr("href") %>%
+  str_replace(".", "collections.ed.ac.uk")
+
+# scrape artists ---------------------------------------------------------------
+
+artists2 <- page2 %>%
+  html_nodes(".iteminfo") %>%
+  html_node(".artist") %>%
+  html_text() %>%
+  str_squish()
+
+artists_links2 <- page2 %>%
+  html_nodes(".iteminfo") %>%
+  html_node(".artist") %>%
+  html_attr("href") %>%
+  str_replace(".", "collections.ed.ac.uk/art")
+
+# put together in a data frame -------------------------------------------------
 
 second_ten <- tibble(
-  ...
+  title = titles2,
+  artist = artists2,
+  link = links2
 )
