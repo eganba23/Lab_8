@@ -17,7 +17,7 @@ titles <- page %>%
   html_nodes(".iteminfo") %>%
   html_node("h3 a") %>%
   html_text() %>%
-  ___()
+  str_squish()
 
 # scrape links -----------------------------------------------------------------
 
