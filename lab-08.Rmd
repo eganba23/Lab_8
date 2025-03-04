@@ -59,21 +59,52 @@ Using skim(), it appears that there are 111 artists missing from the data frame.
 
 ```{r filter}
 
-uoe_art_mutated <- uoe_art %>%
-  mutate(year1 = case_when(
-    year == "2" ~ "1964"
+#Change year for Death Mask
+uoe_art_fixed <- uoe_art %>%
+  mutate(year = case_when(
+    year == "2" ~ "1964",
+    .default = as.character(year)
   ))
 
 
-uoe_art_filtered %>%
-  ggplot(aes(
-    x = year
-  ))+
-  geom_bar()
-view(uoe_art_mutated)
+#Automate binning each sequence
+
+bin_year = function(year_s,year_e,year_des) {
+  uoe_art_fixed%>%
+  mutate(year_bin = case_when(
+    year > "year_s" & year <= "year_e" ~ "year_des",
+      ))
+}
+
+#sequence 
+year_jump_s <- seq(from = 1810, to = 2020, by = 10)
+year_jump_e <- seq(from = 1820, to = 2030, by = 10)
+year_jump_bin <- seq(from = 1810, to = 2020, by = 10)
+
+bin_year(year_jump_s,year_jump_e,year_bin)
+
+  print(year_jump_bin)
+
+
+
+view(uoe_art_fixed)
+
+
+ ggplot(data=subset(
+   uoe_art_fixed,
+   !is.na(year)), 
+   aes(x=year))+
+  geom_bar()+
+   labs(
+     x = "Artworks in a year",
+     y = "Year",
+     title = "Endinborough Art Collection"
+   )
+
+
 ```
 
-## Exercise 10  
+Here I used a subset of the data that got rid of the missing years.
 
 *Write your answer here.*  
 
