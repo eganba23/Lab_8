@@ -11,6 +11,7 @@ First, let's load the necessary packages:
 
 ```{r load-packages, message = FALSE, echo = FALSE}
 library(tidyverse) 
+library(dplyr)
 library(skimr)
 library(robotstxt) #use to see if can use paths_allowed
 library(rvest)
@@ -65,60 +66,49 @@ uoe_art_fixed <- uoe_art %>%
     year == "2" ~ "1964",
     .default = as.character(year)
   ))
-
-
-#Automate binning each sequence
-
-bin_year = function(year_s,year_e,year_des) {
-  uoe_art_fixed%>%
-  mutate(year_bin = case_when(
-    year > "year_s" & year <= "year_e" ~ "year_des",
-      ))
-}
-
-#sequence 
-year_jump_s <- seq(from = 1810, to = 2020, by = 10)
-year_jump_e <- seq(from = 1820, to = 2030, by = 10)
-year_jump_bin <- seq(from = 1810, to = 2020, by = 10)
-
-bin_year(year_jump_s,year_jump_e,year_bin)
-
-  print(year_jump_bin)
-
-
-
 view(uoe_art_fixed)
+
+
+
+uoe_art_fixed <- uoe_art_fixed %>%
+  mutate(decade = cut(as.numeric(year), 
+                        breaks = seq(1810, 2030, by = 10), 
+                        labels = seq(1810, 2020, by = 10), 
+                        right = TRUE))
 
 
  ggplot(data=subset(
    uoe_art_fixed,
-   !is.na(year)), 
-   aes(x=year))+
+   !is.na(decade)), 
+   aes(x=decade))+
   geom_bar()+
    labs(
-     x = "Artworks in a year",
-     y = "Year",
+     x = "Artworks in a year by decade",
+     y = "Count",
      title = "Endinborough Art Collection"
    )
+```
 
+Here I used a subset of the data that got rid of the missing years and binned years to create decades. We can see there are a lot of artwork created in the mid 1900s.
+
+
+### Artist breakdown
+
+```{r artist frequency}
+
+uoe_art_fixed %>%
+  count(artist, sort = TRUE)
+```
+
+The most common artist is unknown! This is followed by Emma Gillies and N/A. Apparently this database doesn't know a lot about their artworks.
+
+### Art about children
+
+
+```{r children titles}
+
+filter(uoe_art_fixed, str_detect(uoe_art_fixed$title, "Child") == TRUE)
 
 ```
 
-Here I used a subset of the data that got rid of the missing years.
-
-*Write your answer here.*  
-
-Feel free to add code chunks as needed. Don't forget to label your code chunk.
-
-
-## Exercise 11  
-
-
-*Continue with the same structure as above.*
-
-You're doing great—keep going! Follow the same format and add your response below.  
-
-
-## Additional Exercises  
-
-Almost there! Keep building on your work and follow the same structure for any remaining exercises. Each exercise builds on the last, so take your time and make sure your code is working as expected.  
+I found all cases where the title contained child and filtered for them. There are 11 total titles containing child/children.
