@@ -52,6 +52,7 @@ uoe_art %>%
     x = year
   ))+
   geom_bar()
+
 summary(uoe_art)
 ```
 
