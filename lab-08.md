@@ -7,6 +7,8 @@ Benjamin Egan
 
 First, let’s load the necessary packages:
 
+    ## Warning: package 'purrr' was built under R version 4.3.3
+
     ## Warning: package 'robotstxt' was built under R version 4.3.3
 
     ## Warning: package 'magrittr' was built under R version 4.3.3
@@ -194,3 +196,6 @@ filter(uoe_art_fixed, str_detect(uoe_art_fixed$title, "Child") == TRUE)
     ##  9 "Untitled - Children Playing "                      Monik… 1963  coll… 1960  
     ## 10 "The Children's Hour "                              Eduar… <NA>  coll… <NA>  
     ## 11 "Untitled - Portrait of a Woman and Child "         Willi… <NA>  coll… <NA>
+
+I found all cases where the title contained child and filtered for them.
+There are 11 total titles containing child/children.
