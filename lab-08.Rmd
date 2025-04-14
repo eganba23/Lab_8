@@ -4,6 +4,11 @@ author: "Benjamin Egan"
 date: "03/03/25"
 output: github_document
 ---
+
+link to assignment: https://datascience4psych.github.io/DataScience4Psych/lab08.html
+
+link to archived assignment: https://web.archive.org/web/20250414135303/https://datascience4psych.github.io/DataScience4Psych/lab08.html#write-out-data
+
 ## Load Packages and Data  
 
 First, let's load the necessary packages:  
